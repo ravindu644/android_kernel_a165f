@@ -1,0 +1,5 @@
+#disable samsung anti-root stuffs
+CONFIG_UH=n
+CONFIG_SECURITY_DEFEX=n
+CONFIG_PROCA=n
+CONFIG_FIVE=n
