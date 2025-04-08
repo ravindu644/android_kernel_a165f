@@ -58,6 +58,25 @@ export GKI_KERNEL_BUILD_OPTIONS="
     SKIP_MRPROPER=1 \
     KMI_SYMBOL_LIST_STRICT_MODE=0 \
     ABI_DEFINITION= \
+    BUILD_BOOT_IMG=1 \
+    MKBOOTIMG_PATH=${WDIR}/mkbootimg/mkbootimg.py \
+    KERNEL_BINARY=Image.gz \
+    BOOT_IMAGE_HEADER_VERSION=4 \
+    SKIP_VENDOR_BOOT=1 \
+    AVB_SIGN_BOOT_IMG=1 \
+    AVB_BOOT_PARTITION_SIZE=67108864 \
+    AVB_BOOT_KEY=${WDIR}/mkbootimg/tests/data/testkey_rsa2048.pem \
+    AVB_BOOT_ALGORITHM=SHA256_RSA2048 \
+    AVB_BOOT_PARTITION_NAME=boot \
+    GKI_RAMDISK_PREBUILT_BINARY=ramdisk.img.lz4 \
+    LZ4_RAMDISK=1 \
+"
+
+# Build options (extra)
+export MKBOOTIMG_EXTRA_ARGS="
+    --os_version 12.0.0 \
+    --os_patch_level 2025-03-00 \
+    --pagesize 4096 \
 "
 
 # Run menuconfig only if you want to.
