@@ -58,7 +58,26 @@ export GKI_KERNEL_BUILD_OPTIONS="
     SKIP_MRPROPER=1 \
     KMI_SYMBOL_LIST_STRICT_MODE=0 \
     ABI_DEFINITION= \
+    BUILD_BOOT_IMG=1 \
+    MKBOOTIMG_PATH=${WDIR}/mkbootimg/mkbootimg.py \
+    KERNEL_BINARY=Image.gz \
+    BOOT_IMAGE_HEADER_VERSION=4 \
+    SKIP_VENDOR_BOOT=1 \
+    AVB_SIGN_BOOT_IMG=1 \
+    AVB_BOOT_PARTITION_SIZE=67108864 \
+    AVB_BOOT_KEY=${WDIR}/mkbootimg/tests/data/testkey_rsa2048.pem \
+    AVB_BOOT_ALGORITHM=SHA256_RSA2048 \
+    AVB_BOOT_PARTITION_NAME=boot \
+    GKI_RAMDISK_PREBUILT_BINARY=${WDIR}/oem_prebuilt_images/gki-ramdisk.lz4 \
 "
+
+# Build options (extra)
+export MKBOOTIMG_EXTRA_ARGS="
+    --os_version 12.0.0 \
+    --os_patch_level 2025-03-00 \
+    --pagesize 4096 \
+"
+export GKI_RAMDISK_PREBUILT_BINARY="${WDIR}/oem_prebuilt_images/gki-ramdisk.lz4"
 
 # Run menuconfig only if you want to.
 # It's better to use MAKE_MENUCONFIG=0 when everything is already properly enabled, disabled, or configured.
@@ -72,4 +91,6 @@ fi
 cd "${WDIR}/kernel"
 
 # Main cooking progress
-env ${GKI_KERNEL_BUILD_OPTIONS} ./build/build.sh
+( env ${GKI_KERNEL_BUILD_OPTIONS} ./build/build.sh || exit 1 ) && \
+    ( cp "${WDIR}/out/target/product/a16/obj/KERNEL_OBJ/boot.img" "${WDIR}/dist" 
+      cp "${WDIR}/out/target/product/a16/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz" "${WDIR}/dist" )
