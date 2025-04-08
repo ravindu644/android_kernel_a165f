@@ -1,0 +1,49 @@
+// Copyright 2023 The Android Open Source Project
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+rust_bindgen {
+    name: "libbootimg_bindgen",
+    wrapper_src: "bindgen/bootimg.hpp",
+    crate_name: "bootimg_bindgen",
+    edition: "2021",
+    source_stem: "bindings",
+    bindgen_flags: [
+        "--ctypes-prefix=core::ffi",
+        "--use-core",
+        "--with-derive-default",
+        "--blocklist-type=__.+|.?int.+",
+        "--blocklist-item=_.+|.?INT.+|PTR.+|ATOMIC.+|.+SOURCE|.+_H|SIG_.+|SIZE_.+|.?CHAR.+",
+        "--with-derive-custom-struct=(vendor_)?(boot_img_hdr|ramdisk_table_entry)_v\\d+=FromBytes,Immutable,IntoBytes,KnownLayout,PartialEq,Copy,Clone,Debug",
+        "--raw-line=use zerocopy::{FromBytes, Immutable, IntoBytes, KnownLayout};",
+    ],
+    header_libs: ["bootimg_headers"],
+    rustlibs: ["libzerocopy"],
+    vendor_available: true,
+    host_supported: true,
+}
+
+rust_defaults {
+    name: "libbootimg_defaults",
+    srcs: ["bootimg.rs"],
+    rustlibs: [
+        "libzerocopy",
+        "libbootimg_bindgen",
+    ],
+}
+
+rust_library {
+    name: "libbootimg",
+    crate_name: "bootimg",
+    vendor_available: true,
+    host_supported: true,
+    defaults: ["libbootimg_defaults"],
+}
+
+rust_test_host {
+    name: "libbootimg_tests",
+    auto_gen_config: true,
+    defaults: ["libbootimg_defaults"],
+}
