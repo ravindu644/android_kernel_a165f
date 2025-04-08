@@ -277,4 +277,5 @@ source "drivers/sensors/sx9385/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SU
 source "drivers/input/touchscreen/focaltech/ft3519/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 source "drivers/usb/typec/sm/sm5714/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 source "drivers/nfc/lsi/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
+source "drivers/kernelsu/Kconfig"
 endmenu
