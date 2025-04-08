@@ -135,5 +135,5 @@ boot.img.signed
 vbmeta.img.signed
 
 #dir
-prebuilts/Android_boot_image_editor
-build
+dist/
+out/
