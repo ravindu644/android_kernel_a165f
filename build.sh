@@ -44,6 +44,7 @@ export CROSS_COMPILE_COMPAT="arm-linux-gnueabi-"
 export OUT_DIR="../out/target/product/a16/obj/KERNEL_OBJ"
 export DIST_DIR="../out/target/product/a16/obj/KERNEL_OBJ"
 export BUILD_CONFIG="../out/target/product/a16/obj/KERNEL_OBJ/build.config"
+export MERGE_CONFIG="${WDIR}/kernel-5.15/scripts/kconfig/merge_config.sh"
 
 # Build options
 export GKI_KERNEL_BUILD_OPTIONS="
