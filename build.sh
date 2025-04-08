@@ -49,6 +49,8 @@ export MERGE_CONFIG="${WDIR}/kernel-5.15/scripts/kconfig/merge_config.sh"
 # Build options
 export GKI_KERNEL_BUILD_OPTIONS="
     SKIP_MRPROPER=1 \
+    KMI_SYMBOL_LIST_STRICT_MODE=0 \
+    ABI_DEFINITION= \
 "
 
 # Run menuconfig only if you want to.
