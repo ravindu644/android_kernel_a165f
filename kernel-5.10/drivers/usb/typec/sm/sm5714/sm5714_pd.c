@@ -1222,6 +1222,7 @@ void sm5714_usbpd_power_ready(struct device *dev,
 		mode = sm5714_get_pd_support(pdic_data);
 		typec_set_pwr_opmode(pdic_data->port, mode);
 #endif
+		send_otg_notify(get_otg_notify(), NOTIFY_EVENT_PD_CONTRACT, 1);
 	}
 
 #if IS_ENABLED(CONFIG_BATTERY_SAMSUNG)
@@ -1748,6 +1749,7 @@ int sm5714_usbpd_evaluate_capability(struct sm5714_usbpd_data *pd_data)
 #endif
 	data_obj_type *pd_obj;
 	int min_volt = 0, max_volt = 0, max_current = 0, max_power = 0;
+	int usb_comm_capable = 0;
 
 #if IS_ENABLED(CONFIG_PDIC_PD30)
 	pd_data->specification_revision =
@@ -1787,6 +1789,8 @@ int sm5714_usbpd_evaluate_capability(struct sm5714_usbpd_data *pd_data)
 						pd_obj->power_data_obj.usb_comm_capable;
 			pdic_sink_status->power_list[i + 1].suspend =
 						pd_obj->power_data_obj.usb_suspend_support;
+			if (!usb_comm_capable)
+				usb_comm_capable = !!pd_obj->power_data_obj.usb_comm_capable;
 			break;
 		case POWER_TYPE_BATTERY:
 			min_volt = pd_obj->power_data_obj_battery.min_voltage * USBPD_VOLT_UNIT;
@@ -1845,6 +1849,13 @@ int sm5714_usbpd_evaluate_capability(struct sm5714_usbpd_data *pd_data)
 			break;
 		}
 	}
+
+#if IS_ENABLED(CONFIG_USE_USB_COMMUNICATIONS_CAPABLE)
+	if (usb_comm_capable)
+		send_otg_notify(get_otg_notify(), NOTIFY_EVENT_PD_USB_COMM_CAPABLE, USB_NOTIFY_COMM_CAPABLE);
+	else
+		send_otg_notify(get_otg_notify(), NOTIFY_EVENT_PD_USB_COMM_CAPABLE, USB_NOTIFY_NO_COMM_CAPABLE);
+#endif
 
 	if (pdic_sink_status->rp_currentlvl == RP_CURRENT_ABNORMAL) {
 		available_pdo_num = 1;
@@ -2234,13 +2245,16 @@ void sm5714_usbpd_protocol_rx(struct sm5714_usbpd_data *pd_data)
 				pdic_data->status_reg |= BITMSG(MSG_NONE);
 				break;
 			case USBPD_Get_Battery_Cap:
-				pdic_data->status_reg |= BITMSG(MSG_GET_BAT_CAP);
+				if (pd_data->policy.rx_data_obj[0].get_battery_cap_data.battery_cap_ref >= 8)
+					pdic_data->status_reg |= BITMSG(MSG_NOT_SUPPORTED);
+				else
+					pdic_data->status_reg |= BITMSG(MSG_GET_BAT_CAP);
 				break;
 			case USBPD_Get_Batt_Status:
 				pdic_data->status_reg |= BITMSG(MSG_GET_BAT_STATUS);
 				break;
 			case USBPD_Battery_Cap:
-				pdic_data->status_reg |= BITMSG(MSG_GET_BAT_CAP);
+					pdic_data->status_reg |= BITMSG(MSG_BAT_CAP);
 				break;
 			case USBPD_Get_Manuf_Info:
 				pdic_data->status_reg |= BITMSG(MSG_GET_MANUF_INFO);
@@ -2366,9 +2380,8 @@ void sm5714_usbpd_protocol_rx(struct sm5714_usbpd_data *pd_data)
 			case USBPD_Soft_Reset:
 				pdic_data->status_reg |= BITMSG(MSG_SOFTRESET);
 				break;
-			case USBPD_Data_Reset: /* (Reserved, in PD2 mode) */
-				if (pd_data->policy.rx_msg_header.spec_revision == USBPD_REV_20)
-					pdic_data->status_reg |= BITMSG(MSG_REJECT);
+			case USBPD_Data_Reset:
+				pdic_data->status_reg |= BITMSG(MSG_RESERVED);
 				break;
 			case USBPD_Not_Supported:
 				pdic_data->status_reg |= BITMSG(MSG_NOT_SUPPORTED);
@@ -2395,7 +2408,7 @@ void sm5714_usbpd_protocol_rx(struct sm5714_usbpd_data *pd_data)
 				pdic_data->status_reg |= BITMSG(MSG_GET_SRC_INFO);
 				break;
 			case USBPD_Get_Revision:
-				pdic_data->status_reg |= BITMSG(MSG_NOT_SUPPORTED);
+				pdic_data->status_reg |= BITMSG(MSG_GET_REVISION);
 				break;
 			case 25 ... 31:
 				pdic_data->status_reg |= BITMSG(MSG_RESERVED);

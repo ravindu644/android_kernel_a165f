@@ -1457,6 +1457,11 @@ uint8_t apSelectionIsBssDescQualify(struct ADAPTER *prAdapter,
 {
 	struct WIFI_VAR *prWifiVar = &prAdapter->rWifiVar;
 
+	if (prAdapter->rNchoInfo.fgNCHOEnabled) {
+		log_dbg(SCN, INFO, "NCHO enable, only consider rssi");
+		return TRUE;
+	}
+
 	switch (eRoamReason) {
 	case ROAMING_REASON_POOR_RCPI:
 	case ROAMING_REASON_RETRY:

@@ -11217,7 +11217,10 @@ wlanoidSetWapiKey(IN struct ADAPTER *prAdapter,
 	     prCmdKey->aucPeerAddr[5]) == 0xFF) {
 		prStaRec = cnmGetStaRecByAddress(prAdapter,
 				prBssInfo->ucBssIndex, prBssInfo->aucBSSID);
-		ASSERT(prStaRec);	/* AIS RSN Group key, addr is BC addr */
+		if (prStaRec == NULL) {
+			DBGLOG(REQ, WARN, "Can't find station.\n");
+			return WLAN_STATUS_FAILURE;
+		}
 		kalMemCopy(prCmdKey->aucPeerAddr, prStaRec->aucMacAddr,
 			   MAC_ADDR_LEN);
 	} else {
@@ -11250,7 +11253,8 @@ wlanoidSetWapiKey(IN struct ADAPTER *prAdapter,
 				prStaRec->fgTransmitKeyExist =
 					TRUE;	/* wait for CMD Done ? */
 			} else {
-				ASSERT(FALSE);
+				DBGLOG(REQ, WARN, "Key type is invalid.\n");
+				return WLAN_STATUS_INVALID_DATA;
 			}
 		}
 #if 0
@@ -11305,7 +11309,9 @@ wlanoidSetWapiKey(IN struct ADAPTER *prAdapter,
 							prCmdKey->ucKeyId);
 				prStaRec->ucWlanIndex = prCmdKey->ucWlanIndex;
 			} else {	/* Exist this case ? */
-				ASSERT(FALSE);
+				DBGLOG(REQ, WARN, "Can't find station.\n");
+				return WLAN_STATUS_FAILURE;
+
 				/* prCmdKey->ucWlanIndex = */
 				/* secPrivacySeekForBcEntry(prAdapter, */
 				/* prBssInfo->ucBssIndex, */
@@ -17905,8 +17911,39 @@ uint32_t wlanoidGetBssInfo(IN struct ADAPTER *prAdapter,
 	prAisFsmInfo = aisGetAisFsmInfo(prAdapter, ucBssIndex);
 
 	if (!prBssInfo || !prBssDesc || !prStaRec || !prAisFsmInfo) {
-		DBGLOG(OID, WARN, "status error: %d,%d,%d,%d",
-			prBssInfo, prBssDesc, prStaRec, prAisFsmInfo);
+#if CFG_TC10_FEATURE
+		index += kalSprintf(pvSetBuffer + index, "%02x:%02x:%02x ",
+			bssinfo_back.OUI[0],
+			bssinfo_back.OUI[1],
+			bssinfo_back.OUI[2]);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.channel_freq);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.channel_bw);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.rssi);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.datarate);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.phy_mode);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.ant_mode);
+		index += kalSprintf(pvSetBuffer + index, "%d ", 0);
+		index += kalSprintf(pvSetBuffer + index, "%d ", 0);
+		index += kalSprintf(pvSetBuffer + index, "%d ", 0);
+		index += kalSprintf(pvSetBuffer + index, "%d ", 0);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.AKM);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.Roaming_count);
+		index += kalSprintf(pvSetBuffer + index, "%d ",
+			bssinfo_back.KV);
+		index += kalSprintf(pvSetBuffer + index, "%d",
+			bssinfo_back.KVIE);
+		kalMemCopy(pvSetBuffer + index, separator, 1);
+		index++;
+		*pu4SetInfoLen = index;
+#endif
 		return WLAN_STATUS_SUCCESS;
 	}
 	/* OUI */

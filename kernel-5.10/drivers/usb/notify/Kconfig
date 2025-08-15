@@ -135,6 +135,25 @@ config USB_HOST_CERTI
 	 The usb framework gets this uevent.
 	 It is made by samsung.
 
+config DISABLE_LOCKSCREEN_USB_RESTRICTION
+	bool "disable usb restriction during lockscreen"
+	depends on USB_NOTIFY_LAYER
+	help
+	 Restricting the usb function on the lock screen is a concept applied for usb security
+	 it has been applied since v os (oneui 7.0) or higher
+	 This feature is to avoid applying the concept.
+	 Enable this feature to enable usb communication on the lock screen.
+
+config USE_USB_COMMUNICATIONS_CAPABLE
+	bool "use usb communications capable in source capability"
+	depends on USB_NOTIFY_LAYER
+	default y
+	help
+	 usb_notify can receive usb communications capable event.
+	 it can be used for various processing using event.
+	 You can check if the device that supports PD is the actual usb port.
+	 If this function is implemented, this feature will be default y
+
 #
 # USB notify configuration
 #
@@ -307,6 +326,16 @@ config DISABLE_LOCKSCREEN_USB_RESTRICTION
 	 it has been applied since v os (oneui 7.0) or higher
 	 This feature is to avoid applying the concept.
 	 Enable this feature to enable usb communication on the lock screen.
+
+config USE_USB_COMMUNICATIONS_CAPABLE
+	bool "use usb communications capable in source capability"
+	depends on USB_NOTIFY_LAYER
+	default y
+	help
+	 usb_notify can receive usb communications capable event.
+	 it can be used for various processing using event.
+	 You can check if the device that supports PD is the actual usb port.
+	 If this function is implemented, this feature will be default y
 
 #
 # USB notifier configuration

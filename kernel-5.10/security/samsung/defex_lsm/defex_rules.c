@@ -8,7 +8,6 @@
 
 #if 0
 	/* Rules start after this line */
-
 	{feature_ped_exception,"/system/bin/run-as"},	/* DEFAULT */
 	{feature_ped_exception,"/system/bin/dumpstate"},	/* DEFAULT */
 	{feature_safeplace_path,"/init"},
@@ -219,6 +218,7 @@
 	{feature_safeplace_path,"/vendor/bin/dmabuf_dump"},
 	{feature_safeplace_path,"/vendor/bin/mrdump_tool"},
 	{feature_safeplace_path,"/vendor/bin/hw/vendor.mediatek.hardware.mtkpower@1.0-service"},
+	{feature_safeplace_path,"/vendor/bin/hw/vendor.mediatek.hardware.aee@1.1-service"},
 	{feature_safeplace_path,"/system/bin/linkerconfig"},
 	{feature_safeplace_path,"/system/bin/snapshotctl"},
 	{feature_safeplace_path,"/system/bin/boringssl_self_test32"},
