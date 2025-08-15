@@ -75,7 +75,7 @@ export GKI_KERNEL_BUILD_OPTIONS="
 # Build options (extra)
 export MKBOOTIMG_EXTRA_ARGS="
     --os_version 12.0.0 \
-    --os_patch_level 2025-03-00 \
+    --os_patch_level 2025-05-00 \
     --pagesize 4096 \
 "
 export GKI_RAMDISK_PREBUILT_BINARY="${WDIR}/oem_prebuilt_images/gki-ramdisk.lz4"
