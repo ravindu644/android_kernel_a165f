@@ -10,7 +10,7 @@ mkdir -p "${WDIR}/dist"
 git submodule init && git submodule update
 
 # Install the requirements for building the kernel when running the script for the first time
-if [ ! -f ".requirements" ]; then
+if [ ! -f ".requirements" ] && [ "$USER" != "ravindu644" ]; then
     echo -e "\n[INFO]: INSTALLING REQUIREMENTS..!\n"
     {
         sudo apt update
