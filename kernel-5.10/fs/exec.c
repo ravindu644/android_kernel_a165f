@@ -1918,7 +1918,7 @@ static int do_execveat_common(int fd, struct filename *filename,
 		return PTR_ERR(filename);
 
 #ifdef CONFIG_KSU_SUSFS_SUS_SU
-	if (likely(susfs_is_current_proc_su_not_allowed())) {
+	if (likely(susfs_is_current_proc_umounted())) {
 		goto orig_flow;
 	}
 	if (likely(susfs_is_sus_su_hooks_enabled) &&
