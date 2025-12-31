@@ -112,17 +112,29 @@ build_vendor_dlkm(){
         "${SCRIPT_DIR}/prebuilts_helio_g99/scripts/build_vendor_dlkm.sh"
 }
 
-build_tar(){
-    echo -e "\n[INFO] Creating an Odin flashable tar..\n"
-
+# package stuffs
+package_stuff(){
     cd "${SCRIPT_DIR}/dist"
-    tar -cvf "KernelSU-Next-SM-A165F-${BUILD_KERNEL_VERSION}.tar" boot.img vendor_boot.img && rm boot.img vendor_boot.img
-    echo -e "\n[INFO] Build Finished..!\n"
+
+    tar -cvf "KernelSU-Next-SM-A165F-${BUILD_KERNEL_VERSION}.tar" boot.img vendor_boot.img || {
+        echo "Error: Failed to create tar file"
+        return 1
+    }
+
+    zip -9 -r "KernelSU-Next-SM-A165F-${BUILD_KERNEL_VERSION}-packaged.zip" \
+        "KernelSU-Next-SM-A165F-${BUILD_KERNEL_VERSION}.tar" \
+        vendor_dlkm.img || {
+        echo "Error: Failed to create zip file"
+        return 1
+    }
+
+    rm -f "KernelSU-Next-SM-A165F-${BUILD_KERNEL_VERSION}.tar" vendor_dlkm.img boot.img vendor_boot.img
+
     cd "${SCRIPT_DIR}"
 }
 
 check_requirements_and_install_tc
 build_kernel || exit 1
-build_tar
 build_vendor_boot
 build_vendor_dlkm
+package_stuff
