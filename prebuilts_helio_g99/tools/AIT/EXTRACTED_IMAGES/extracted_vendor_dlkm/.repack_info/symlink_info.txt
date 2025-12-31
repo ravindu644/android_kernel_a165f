@@ -1,0 +1,1 @@
+# Symlink info extracted from /home/ravindu644/Desktop/Github/android_kernel_a165f/prebuilts_helio_g99/tools/AIT/INPUT_IMAGES/vendor_dlkm.img on Wed Dec 31 08:54:09 AM +0530 2025

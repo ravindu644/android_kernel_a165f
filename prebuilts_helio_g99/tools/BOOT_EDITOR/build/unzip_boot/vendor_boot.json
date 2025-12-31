@@ -1,0 +1,49 @@
+{
+  "info" : {
+    "input" : "/home/ravindu644/Desktop/Github/android_kernel_a165f/prebuilts_helio_g99/tools/BOOT_EDITOR/vendor_boot.img",
+    "role" : "vendor_boot.img",
+    "json" : "vendor_boot.json",
+    "headerVersion" : 4,
+    "product" : "SRPXF13B005",
+    "headerSize" : 2128,
+    "pageSize" : 4096,
+    "cmdline" : "bootopt=64S3,32N2,64N2 loop.max_part=7",
+    "tagsLoadAddr" : 1204289536,
+    "kernelLoadAddr" : 1073741824,
+    "imageSize" : 67108864
+  },
+  "ramdisk" : {
+    "file" : "build/unzip_boot/ramdisk.img.lz4",
+    "position" : 4096,
+    "size" : 10017651,
+    "loadAddr" : 1727004672,
+    "xzFlags" : null
+  },
+  "dtb" : {
+    "file" : "build/unzip_boot/dtb",
+    "position" : 10022912,
+    "size" : 188009,
+    "loadAddr" : 1204289536,
+    "dtbList" : [ ]
+  },
+  "ramdisk_table" : {
+    "size" : 108,
+    "eachEntrySize" : 108,
+    "position" : 10211328,
+    "ramdidks" : [ {
+      "size" : 10017651,
+      "offset" : 0,
+      "type" : "PLATFORM",
+      "name" : "",
+      "boardId" : "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+      "boardIdStr" : "",
+      "file" : "build/unzip_boot/ramdisk.1.lz4"
+    } ]
+  },
+  "bootconfig" : {
+    "file" : "",
+    "position" : 0,
+    "size" : 0,
+    "loadAddr" : 0
+  }
+}

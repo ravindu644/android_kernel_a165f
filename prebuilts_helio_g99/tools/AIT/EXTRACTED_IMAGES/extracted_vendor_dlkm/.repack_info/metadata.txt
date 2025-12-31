@@ -1,0 +1,5 @@
+UNPACK_TIME=1767151450
+SOURCE_IMAGE=/home/ravindu644/Desktop/Github/android_kernel_a165f/prebuilts_helio_g99/tools/AIT/INPUT_IMAGES/vendor_dlkm.img
+FILESYSTEM_TYPE=erofs
+MOUNT_METHOD=kernel
+ORIGINAL_UUID=117f7305-45a9-b75e-83eb-ba7f2db17f5c
