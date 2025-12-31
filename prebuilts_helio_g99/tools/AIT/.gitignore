@@ -1,0 +1,14 @@
+.vscode/
+.idea/
+*.img
+*.sparse.img
+INPUT_IMAGES/*
+EXTRACTED_IMAGES/*
+REPACKED_IMAGES/*
+SUPER_TOOLS/*
+*.conf
+CONFIGS/*
+!*/.gitkeep
+.DS_Store
+Thumbs.db
+
